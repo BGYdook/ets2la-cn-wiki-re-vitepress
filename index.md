@@ -6,6 +6,9 @@ hero:
   name: "ETS2LA 中文维基"
   text: ""
   tagline: 适用于欧卡2/美卡的辅助驾驶程序/插件
+  image:
+    src: /image/ets2la-cn.png
+    alt: ETS2LA 图标
   actions:
     - theme: brand
       text: 快速开始
