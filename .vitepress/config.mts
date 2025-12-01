@@ -1,27 +1,37 @@
 import { defineConfig } from 'vitepress'
+import fs from 'node:fs'
+import path from 'node:path'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "ETS2LA 中文维基",
   description: "ETS2LA 的中文文档",
   themeConfig: {
+      siteTitle: "ETS2LA 中文维基",
+      logo: "/image/svg/logo.svg",
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: '主页', link: '/' },
-      { text: '开始', link: '/docs/index' },
-      { text: '作者', link: '/author/index' },
-      { text: '赞助名单', link: '/sponsored/index' }
+        {
+            text: '文档', items: [
+                {text: "基础", link: "/docs/base/"},
+                { // 带分割线的导航栏
+                    items:[
+                        {text: "进阶", link: "/docs/advanced/"},
+                    ],
+                },
+            ],
+        },
+      { text: '作者', link: '/author/' },
+      { text: '赞助名单', link: '/sponsored/' }
     ],
 
-    sidebar: [
-      {
-        text: '文档',
-        items: [
-          { text: 'Markdown 示例', link: '/markdown-examples' },
-          { text: 'API 示例', link: '/api-examples' }
-        ]
-      }
-    ],
+    sidebar: {
+      '/docs/': generateSidebar('docs'),
+      '/author/': generateSidebar('author'),
+      '/sponsored/': generateSidebar('sponsored'),
+      '/': generateSidebar('')
+    },
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/ETS2LA/Euro-Truck-Simulator-2-Lane-Assist' },
@@ -36,6 +46,96 @@ export default defineConfig({
       },
       link: '/image/sponsor.png',
       ariaLabel: 'alipay link' }
-    ]
+    ],
+    footer: {
+      message: '<a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2025160641号-3</a> | <a href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32120202010796" target="_blank" rel="noopener">苏公网安备32120202010796号</a>'
+    }
   }
 })
+
+function readFirstHeading(filePath: string): string | undefined {
+  if (!fs.existsSync(filePath)) return undefined
+  const content = fs.readFileSync(filePath, 'utf-8')
+  const lines = content.split(/\r?\n/)
+  for (const line of lines) {
+    const m = line.match(/^\s*#{1,6}\s+(.*)$/)
+    if (m) return m[1].trim()
+  }
+  const fm = content.match(/^---[\s\S]*?title:\s*(.+)[\s\S]*?---/)
+  if (fm) return fm[1].trim()
+  return undefined
+}
+
+function toDisplayName(name: string): string {
+  const n = name.replace(/-/g, ' ')
+  return n.charAt(0).toUpperCase() + n.slice(1)
+}
+
+function generateSidebar(dirRel: string) {
+  const baseDir = path.resolve(__dirname, dirRel ? `../${dirRel}` : '..')
+  const baseRoute = dirRel ? `/${dirRel}/` : '/'
+  const items: { text: string; link?: string; items?: any[] }[] = []
+
+  if (!fs.existsSync(baseDir)) return items
+
+  const indexPath = path.join(baseDir, 'index.md')
+  if (fs.existsSync(indexPath)) {
+    const fallback = baseRoute === '/' ? '首页' : toDisplayName(dirRel)
+    const text = readFirstHeading(indexPath) || fallback
+    items.push({ text, link: baseRoute })
+  }
+
+  const entries = fs.readdirSync(baseDir, { withFileTypes: true })
+  const dirEntries = entries.filter(e => e.isDirectory())
+  const fileEntries = entries.filter(e => e.isFile())
+
+  // docs 目录优先显示 base -> advanced，其余按名称排序
+  if (dirRel === 'docs') {
+    const preferred = ['base', 'advanced']
+    dirEntries.sort((a, b) => {
+      const ai = preferred.indexOf(a.name)
+      const bi = preferred.indexOf(b.name)
+      if (ai !== -1 || bi !== -1) {
+        if (ai === -1) return 1
+        if (bi === -1) return -1
+        return ai - bi
+      }
+      return a.name.localeCompare(b.name)
+    })
+  } else {
+    dirEntries.sort((a, b) => a.name.localeCompare(b.name))
+  }
+
+  for (const entry of dirEntries) {
+    if (entry.isDirectory()) {
+      const subDir = path.join(baseDir, entry.name)
+      const dirIndex = path.join(subDir, 'index.md')
+      if (fs.existsSync(dirIndex)) {
+        const text = readFirstHeading(dirIndex) || toDisplayName(entry.name)
+        items.push({ text, link: `${baseRoute}${entry.name}/` })
+      } else {
+        const mdFiles = fs.readdirSync(subDir).filter(f => f.endsWith('.md'))
+        if (mdFiles.length) {
+          const groupItems = mdFiles.map(f => {
+            const fp = path.join(subDir, f)
+            const text = readFirstHeading(fp) || toDisplayName(f.replace(/\.md$/, ''))
+            const link = `${baseRoute}${entry.name}/${f.replace(/\.md$/, '')}`
+            return { text, link }
+          })
+          items.push({ text: toDisplayName(entry.name), items: groupItems })
+        }
+      }
+    }
+  }
+
+  for (const entry of fileEntries) {
+    if (entry.name.endsWith('.md') && entry.name !== 'index.md') {
+      const fp = path.join(baseDir, entry.name)
+      const text = readFirstHeading(fp) || toDisplayName(entry.name.replace(/\.md$/, ''))
+      const link = `${baseRoute}${entry.name.replace(/\.md$/, '')}`
+      items.push({ text, link })
+    }
+  }
+
+  return items
+}
