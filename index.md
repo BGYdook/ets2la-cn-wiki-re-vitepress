@@ -34,7 +34,7 @@ features:
 
 ## 声明
 
-::: warning 警告 当您进入该教程界面即表示你已经接受该本许可协议，请往下滑浏览所有使用规则
+::: warning 警告 
 1. 目前 [ETS2LA](https://github.com/ETS2LA/Euro-Truck-Simulator-2-Lane-Assist) 仅支持通过[steam](https:s.team/)购买的正版游戏，学习版不支持
 2. 如果你想要安装 ETS2LA，请确保你使用的是由微软提供的原版系统，而非第三方修改过的系统，如：魔改版 Windows 等；笔记本用户如未重装过系统均为微软原版系统，台式机用户需自行分辨是否为原版系统。
 3. 如果您是电脑小白，为了确保您能完整/顺利地安装 ETS2LA，请确保你的电脑中没有虚拟组网/虚拟局域网软件正在运行。
@@ -44,7 +44,7 @@ features:
 :::
 
 ## 许可协议 
-本教程名为： ETS2LA 中国区安装与使用指南   您进入该教程界面即表示你已经接受该本许可协议
+本教程名为： ETS2LA 中国区安装与使用指南
 
 由 [晚安](https://goodnightan.com)，[Srlily](https://github.com/Srlily), [MR-UIAW](https://space.bilibili.com/357816575) ,[BGYdook](https://space.bilibili.com/3493113874090879) 共同创作。
 
