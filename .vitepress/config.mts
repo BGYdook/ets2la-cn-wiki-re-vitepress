@@ -25,7 +25,6 @@ export default defineConfig({
       '/version/v3/docs/': set_sidebar('/version/v3/docs/'),
       '/author/': set_sidebar('/author/'),
       '/sponsored/': set_sidebar('/sponsored/'),
-      '/Introduction/': set_sidebar('/Introduction/'),
       '/about/': set_sidebar('/about/'),
       '/': set_sidebar('')
     },
