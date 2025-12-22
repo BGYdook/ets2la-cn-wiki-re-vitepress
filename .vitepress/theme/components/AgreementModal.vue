@@ -72,6 +72,9 @@ onMounted(() => {
             <li>演绎 — 修改、转换或基于本作品进行二次创作。</li>
           </ul>
 
+          <p>如您接受，请勾选“我已阅读上述许可协议”并选择“同意并继续”按钮</p>
+          <p>如您不接受，请选择“不同意”按钮并返回主页</p>
+          
           <div class="agreement-checkbox">
             <label class="checkbox-row">
               <input v-model="agreed" type="checkbox" />

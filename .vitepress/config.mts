@@ -6,6 +6,9 @@ export default defineConfig({
   title: "ETS2LA 中文维基",
   description: "ETS2LA 的中文文档",
   ignoreDeadLinks: true,
+  head: [
+    ['link', { rel: 'icon', href: '/image/ets2la-cn.png' }]
+  ],
   themeConfig: {
       siteTitle: "ETS2LA 中文维基",
       logo: "/image/svg/logo.svg",
@@ -22,7 +25,6 @@ export default defineConfig({
       '/version/v3/docs/': set_sidebar('/version/v3/docs/'),
       '/author/': set_sidebar('/author/'),
       '/sponsored/': set_sidebar('/sponsored/'),
-      '/Introduction/': set_sidebar('/Introduction/'),
       '/about/': set_sidebar('/about/'),
       '/': set_sidebar('')
     },
