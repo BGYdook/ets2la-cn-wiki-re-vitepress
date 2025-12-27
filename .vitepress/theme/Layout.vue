@@ -9,9 +9,41 @@ import mediumZoom from 'medium-zoom'
 // 保存当前的 medium-zoom 实例，便于路由切换时卸载并重新挂载
 let zoom: ReturnType<typeof mediumZoom> | null = null
 let uptimeTimer: number | null = null
+let umamiToken: string | null = null
 
 const { theme } = useData()
 const route = useRoute()
+
+const updateUmamiStats = async () => {
+  const el = document.getElementById('umami-stats')
+  if (!el) return
+
+  try {
+    if (!umamiToken) {
+      const shareRes = await fetch('https://static.goodnightan.com/api/share/3X23lyKTw4dYOm54')
+      const shareData = await shareRes.json()
+      umamiToken = shareData.token
+    }
+
+    if (!umamiToken) return
+
+    const startAt = 1733333200000
+    const endAt = Date.now()
+    const statsRes = await fetch(`https://static.ets2la.cn/api/websites/2b74bcbe-2fa0-45a5-a4a0-39840310cf5a/stats?startAt=${startAt}&endAt=${endAt}`, {
+      headers: {
+        'x-umami-share-token': umamiToken
+      }
+    })
+    const statsData = await statsRes.json()
+    const pageviews = statsData.pageviews
+    const visits = statsData.visits
+    const visitors = statsData.visitors
+    
+    el.innerText = `浏览量: ${pageviews}  访客数: ${visitors}  访问次数: ${visits}`
+  } catch (e) {
+    console.error('Failed to fetch umami stats', e)
+  }
+}
 
 const updateUptime = () => {
   const el = document.getElementById('site-uptime')
@@ -97,6 +129,7 @@ onMounted(() => {
   requestAnimationFrame(() => {
     apply()
     updateUptime()
+    updateUmamiStats()
     updateVersionNav()
   })
   uptimeTimer = window.setInterval(updateUptime, 60000)
@@ -108,6 +141,7 @@ watch(() => route.path, () => {
   // 路由变更也更新一下时间
   setTimeout(() => {
     updateUptime()
+    updateUmamiStats()
     updateVersionNav()
   }, 100)
 })

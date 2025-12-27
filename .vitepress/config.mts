@@ -60,7 +60,7 @@ export default defineConfig({
       ariaLabel: 'alipay link' }
     ],
     footer: {
-      message: '<a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2025160641号-3</a> | <a href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32120202010796" target="_blank" rel="noopener">苏公网安备32120202010796号</a> | <span id="site-uptime"></span>'
+      message: '<span id="umami-stats"></span> | <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2025160641号-3</a> | <a href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32120202010796" target="_blank" rel="noopener">苏公网安备32120202010796号</a> | <span id="site-uptime"></span>'
     }
   },
     //图片懒加载
