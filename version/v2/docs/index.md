@@ -7,6 +7,13 @@ sidebar: true
 
 <AgreementModal />
 
+<div align="center">
+
+![counter](https://count.getloli.com/@:ets2la-cn-wiki=re-vitepress?theme=minecraft)
+*文档访问量*
+
+</div>
+
 # 简介
 [ETS2LA](https://github.com/ETS2LA/Euro-Truck-Simulator-2-Lane-Assist)是一款开源免费的适用于欧卡2/美卡的辅助驾驶程序
 ETS2LA项目旨在最终将自动驾驶技术引入 **SCS Software 的卡车模拟器** 。本文档仍在编写中，并将随着项目进展进行更新。如有任何疑问，请在 [kook](https://www.kookapp.cn/app/invite/VZaUPP) 中提问。
